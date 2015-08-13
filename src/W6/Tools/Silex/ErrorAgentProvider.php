@@ -1,6 +1,7 @@
 <?php
 namespace W6\Tools\Silex;
 
+use Silex\ServiceProviderInterface;
 use W6\Tools\ErrorAgent;
 
 class ErrorAgentProvider implements ServiceProviderInterface
