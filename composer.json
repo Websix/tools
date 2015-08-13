@@ -1,0 +1,23 @@
+{
+    "name": "w6/tools",
+    "description": "Biblioteca de componentes usados na Websix",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Drake Wolf",
+            "email": "rubensdrk@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "swiftmailer/swiftmailer": "5.*"
+    }, 
+    "require-dev": {
+        "symfony/var-dumper": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "W6":"src/"
+        }
+    }
+}
