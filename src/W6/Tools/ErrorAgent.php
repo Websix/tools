@@ -3,12 +3,13 @@ namespace W6\Tools;
 
 class ErrorAgent 
 {
- 	public function __construct() {
+ 	  public function __construct() {
        	set_exception_handler(array($this, 'exception_handler'));
        	set_error_handler(array($this, 'error_handler'));
    	}
 
    	public function exception_handler($exception) {
+
    		global $__agentConfig;
 
    	 	$html = file_get_contents(dirname(__FILE__).'/template/exception.w6');
@@ -26,9 +27,14 @@ class ErrorAgent
        	print "File: ". $exception->getFile() ."<br>";
        	print "Line: ". $exception->getLine() ."<br>";
        	print "Code: ". $exception->getCode() ."<br><br><br>";
+        exit();
    	}
 
    	public function error_handler($errno, $errstr, $errfile, $errline) {
+
+      if (!(error_reporting() & $errno)) {
+            return;
+      }
    		global $__agentConfig;
 
        	$html = file_get_contents(dirname(__FILE__).'/template/error.w6');
@@ -46,6 +52,7 @@ class ErrorAgent
        	print "Error:  <span style='color:red'>". $errstr ."</span><br>";
        	print "File: ". $errfile ."<br>";
        	print "Line: ". $errline ."<br><br><br>";
+        exit();
    	}
 
    	public function sendEmail($html){
