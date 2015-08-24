@@ -1,75 +1,77 @@
-<?php 
+<?php
 namespace W6\Tools;
 
-class ErrorAgent 
+class ErrorAgent
 {
- 	  public function __construct() {
-       	set_exception_handler(array($this, 'exception_handler'));
-       	set_error_handler(array($this, 'error_handler'));
-   	}
+    public function __construct()
+    {
+        set_exception_handler(array($this, 'exceptionHandler'));
+        set_error_handler(array($this, 'errorHandler'));
+    }
 
-   	public function exception_handler($exception) {
+    public function exceptionHandler($exception)
+    {
+        global $__agentConfig;
 
-   		global $__agentConfig;
+        $html = file_get_contents(dirname(__FILE__).'/template/exception.w6');
+        $html = str_replace('###sitename###', $__agentConfig['sitename'], $html);
+        $html = str_replace('###message###', $exception->getMessage(), $html);
+        $html = str_replace('###file###', $exception->getFile(), $html);
+        $html = str_replace('###line###', $exception->getLine(), $html);
+        $html = str_replace('###code###', $exception->getCode(), $html);
 
-   	 	$html = file_get_contents(dirname(__FILE__).'/template/exception.w6');
-       	$html = str_replace('###sitename###', $__agentConfig['sitename'], $html);
-       	$html = str_replace('###message###', $exception->getMessage(), $html);
-       	$html = str_replace('###file###',  $exception->getFile(), $html);
-       	$html = str_replace('###line###', $exception->getLine(), $html);
-       	$html = str_replace('###code###', $exception->getCode(), $html);
-	   	
-	   	if($__agentConfig['sendEmail']) {
-	   		$this->sendEmail($html);
-	   	}
-       	
-       	print "Exception Caught: <span style='color:red'>". $exception->getMessage() ."</span><br>";
-       	print "File: ". $exception->getFile() ."<br>";
-       	print "Line: ". $exception->getLine() ."<br>";
-       	print "Code: ". $exception->getCode() ."<br><br><br>";
+        if ($__agentConfig['sendEmail']) {
+            $this->sendEmail($html);
+        }
+
+        print "Exception Caught: <span style='color:red'>". $exception->getMessage() ."</span><br>";
+        print "File: ". $exception->getFile() ."<br>";
+        print "Line: ". $exception->getLine() ."<br>";
+        print "Code: ". $exception->getCode() ."<br><br><br>";
         exit();
-   	}
+    }
 
-   	public function error_handler($errno, $errstr, $errfile, $errline) {
-
-      if (!(error_reporting() & $errno)) {
+    public function errorHandler($errno, $errstr, $errfile, $errline)
+    {
+        if (!(error_reporting() & $errno)) {
             return;
-      }
-   		global $__agentConfig;
+        }
+        global $__agentConfig;
 
-       	$html = file_get_contents(dirname(__FILE__).'/template/error.w6');
-       	$html = str_replace('###sitename###', $__agentConfig['sitename'], $html);
-       	$html = str_replace('###errno###', $errno, $html);
-       	$html = str_replace('###errstr###', $errstr, $html);
-       	$html = str_replace('###errfile###', $errfile, $html);
-       	$html = str_replace('###errline###', $errline, $html);
+        $html = file_get_contents(dirname(__FILE__).'/template/error.w6');
+        $html = str_replace('###sitename###', $__agentConfig['sitename'], $html);
+        $html = str_replace('###errno###', $errno, $html);
+        $html = str_replace('###errstr###', $errstr, $html);
+        $html = str_replace('###errfile###', $errfile, $html);
+        $html = str_replace('###errline###', $errline, $html);
 
-	   	if($__agentConfig['sendEmail']) {
-	   		$this->sendEmail($html);
-	   	}
+        if ($__agentConfig['sendEmail']) {
+            $this->sendEmail($html);
+        }
 
-       	print "Error Code: ". $errno ."<br>";
-       	print "Error:  <span style='color:red'>". $errstr ."</span><br>";
-       	print "File: ". $errfile ."<br>";
-       	print "Line: ". $errline ."<br><br><br>";
+        print "Error Code: ". $errno ."<br>";
+        print "Error:  <span style='color:red'>". $errstr ."</span><br>";
+        print "File: ". $errfile ."<br>";
+        print "Line: ". $errline ."<br><br><br>";
         exit();
-   	}
+    }
 
-   	public function sendEmail($html){
-   		global $__agentConfig;
+    public function sendEmail($html)
+    {
+        global $__agentConfig;
 
-   		$message = \Swift_Message::newInstance()
-	      ->setSubject('ErrorAgent - '.$__agentConfig['sitename'])
-	      ->setFrom($__agentConfig['from'])
-	      ->setTo($__agentConfig['to'])
-	      ->setBody($html, 'text/html');
+        $message = \Swift_Message::newInstance()
+            ->setSubject('ErrorAgent - '.$__agentConfig['sitename'])
+            ->setFrom($__agentConfig['from'])
+            ->setTo($__agentConfig['to'])
+            ->setBody($html, 'text/html');
 
-	    $transport = \Swift_SmtpTransport::newInstance($__agentConfig['host'], $__agentConfig['port'])
-	      ->setUsername($__agentConfig['email'])
-	      ->setPassword($__agentConfig['password']);
+        $transport = \Swift_SmtpTransport::newInstance($__agentConfig['host'], $__agentConfig['port'])
+        ->setUsername($__agentConfig['email'])
+        ->setPassword($__agentConfig['password']);
 
-	    $mailer = \Swift_Mailer::newInstance($transport);
+        $mailer = \Swift_Mailer::newInstance($transport);
 
-	    $result = $mailer->send($message);
-   	}
+        $result = $mailer->send($message);
+    }
 }

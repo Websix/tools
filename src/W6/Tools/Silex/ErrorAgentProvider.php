@@ -9,7 +9,8 @@ class ErrorAgentProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
-        new ErrorAgent();
+        $errorAgent = new ErrorAgent();
+        $app['errorAgent'] = $errorAgent;
     }
 
     public function boot(Application $app)
