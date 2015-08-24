@@ -56,6 +56,22 @@ class ErrorAgent
         exit();
     }
 
+    public function errorHandlerNoty($errno, $errstr, $errfile, $errline)
+    {
+        global $__agentConfig;
+
+        $html = file_get_contents(dirname(__FILE__).'/template/error.w6');
+        $html = str_replace('###sitename###', $__agentConfig['sitename'], $html);
+        $html = str_replace('###errno###', $errno, $html);
+        $html = str_replace('###errstr###', $errstr, $html);
+        $html = str_replace('###errfile###', $errfile, $html);
+        $html = str_replace('###errline###', $errline, $html);
+
+        if ($__agentConfig['sendEmail']) {
+            $this->sendEmail($html);
+        }
+    }
+
     public function sendEmail($html)
     {
         global $__agentConfig;
