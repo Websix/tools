@@ -20,6 +20,11 @@ class ErrorAgent
         $html = str_replace('###line###', $exception->getLine(), $html);
         $html = str_replace('###code###', $exception->getCode(), $html);
 
+        $server = $_SERVER['REMOTE_ADDR'];
+        $server .= '<br>'.$_SERVER['HTTP_USER_AGENT'];
+
+        $html = str_replace('###server###', $server, $html);
+
         if ($__agentConfig['sendEmail']) {
             $this->sendEmail($html);
         }
@@ -44,6 +49,11 @@ class ErrorAgent
         $html = str_replace('###errstr###', $errstr, $html);
         $html = str_replace('###errfile###', $errfile, $html);
         $html = str_replace('###errline###', $errline, $html);
+
+        $server = $_SERVER['REMOTE_ADDR'];
+        $server .= '<br>'.$_SERVER['HTTP_USER_AGENT'];
+
+        $html = str_replace('###server###', $server, $html);
 
         if ($__agentConfig['sendEmail']) {
             $this->sendEmail($html);
