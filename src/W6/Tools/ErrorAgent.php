@@ -19,6 +19,7 @@ class ErrorAgent
         $html = str_replace('###file###', $exception->getFile(), $html);
         $html = str_replace('###line###', $exception->getLine(), $html);
         $html = str_replace('###code###', $exception->getCode(), $html);
+        $html = str_replace('###trace###', $exception->getTraceAsString(), $html);
 
         $server = $_SERVER['REMOTE_ADDR'];
         $server .= '<br>'.$_SERVER['HTTP_USER_AGENT'];

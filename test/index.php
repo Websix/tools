@@ -18,5 +18,8 @@ $__agentConfig['to'] = array('rubens@websix.com.br' => 'Rubens');
 $__agentConfig['sendEmail'] = true;
 
 new ErrorAgent();
+include 'c.php';
 //echo $__agentConfig['teste Error'];//erro pq a posição do array nao existe
-throw new \Exception('teste Exception');//teste
+//throw new \Exception('teste Exception');//teste
+$c = new C;
+$c->teste();
