@@ -15,7 +15,7 @@ $__agentConfig['sendEmail'] = true;
 
 new ErrorAgent();
 include 'c.php';
-//echo $__agentConfig['teste Error'];//erro pq a posição do array nao existe
+echo $__agentConfig['teste Error'];//erro pq a posição do array nao existe
 //throw new \Exception('teste Exception');//teste
 $c = new C;
 $c->teste();

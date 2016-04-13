@@ -50,7 +50,7 @@ class ErrorAgent
         $html = str_replace('###errstr###', $errstr, $html);
         $html = str_replace('###errfile###', $errfile, $html);
         $html = str_replace('###errline###', $errline, $html);
-        $html = str_replace('###trace###', $exception->getTraceAsString(), $html);
+        //$html = str_replace('###trace###', $exception->getTraceAsString(), $html);
 
 
         $server = $_SERVER['REMOTE_ADDR'];
@@ -79,7 +79,7 @@ class ErrorAgent
         $html = str_replace('###errstr###', $errstr, $html);
         $html = str_replace('###errfile###', $errfile, $html);
         $html = str_replace('###errline###', $errline, $html);
-        $html = str_replace('###trace###', $exception->getTraceAsString(), $html);
+        //$html = str_replace('###trace###', $exception->getTraceAsString(), $html);
 
 
         $server = $_SERVER['REMOTE_ADDR'];
