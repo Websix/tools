@@ -106,6 +106,12 @@ class ErrorAgent
         $transport = \Swift_SmtpTransport::newInstance($__agentConfig['host'], $__agentConfig['port'])
         ->setUsername($__agentConfig['email'])
         ->setPassword($__agentConfig['password']);
+        if (isset($__agentConfig['localDomain'])) {
+            if (!is_array($__agentConfig['localDomain'])) {
+                throw new Exception("The 'localDomain' setting must be an array", 400);
+            }
+            $transport->setLocalDomain($__agentConfig['localDomain']);
+        }
 
         $mailer = \Swift_Mailer::newInstance($transport);
 
