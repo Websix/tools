@@ -50,7 +50,7 @@ class ErrorAgent
         $html = str_replace('###errstr###', $errstr, $html);
         $html = str_replace('###errfile###', $errfile, $html);
         $html = str_replace('###errline###', $errline, $html);
-        $html = str_replace('###trace###', $exception->getTraceAsString(), $html);
+        //$html = str_replace('###trace###', $exception->getTraceAsString(), $html);
 
 
         $server = $_SERVER['REMOTE_ADDR'];
@@ -79,7 +79,7 @@ class ErrorAgent
         $html = str_replace('###errstr###', $errstr, $html);
         $html = str_replace('###errfile###', $errfile, $html);
         $html = str_replace('###errline###', $errline, $html);
-        $html = str_replace('###trace###', $exception->getTraceAsString(), $html);
+        //$html = str_replace('###trace###', $exception->getTraceAsString(), $html);
 
 
         $server = $_SERVER['REMOTE_ADDR'];
@@ -106,6 +106,12 @@ class ErrorAgent
         $transport = \Swift_SmtpTransport::newInstance($__agentConfig['host'], $__agentConfig['port'])
         ->setUsername($__agentConfig['email'])
         ->setPassword($__agentConfig['password']);
+        if (isset($__agentConfig['localDomain'])) {
+            if (!is_array($__agentConfig['localDomain'])) {
+                throw new \Exception("The 'localDomain' setting must be an array", 400);
+            }
+            $transport->setLocalDomain($__agentConfig['localDomain']);
+        }
 
         $mailer = \Swift_Mailer::newInstance($transport);
 
